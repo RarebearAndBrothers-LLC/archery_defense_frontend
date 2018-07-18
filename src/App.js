@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import DrawbackCircle from './DrawbackCircle'
 import Grenade from './Grenade';
-import Canvas from './Canvas';
+import DrawbackInnerCircle from './DrawbackInnerCircle';
 
 
 class App extends Component {
@@ -26,10 +26,8 @@ class App extends Component {
     document.body.appendChild(canvas);
     let cWidth=canvas.width;
     let cHeight=canvas.height;
-
-
-    var groundPoint = cHeight - (cHeight/4)
-    var ground = groundPoint+15;
+    let groundPoint = cHeight - (cHeight/4)
+    let ground = groundPoint+15;
     // sky
     ctx.fillStyle="rgba(0,0,200,0.2)";
     ctx.fillRect(0,0,cWidth,ground);
@@ -42,20 +40,20 @@ class App extends Component {
     ctx.fillStyle="rgba(0,200,100,0.6)";
     ctx.fillRect(0,ground,cWidth,cHeight);
 
-    var shootingCirc = {
+    let shootingCirc = {
       x: 200,
-      y: groundPoint-200,
+      y: groundPoint-100,
       r: 75
     }
     
-    var drawBackCirc = {
+    let drawBackCirc = {
       x: shootingCirc.x,
       y: shootingCirc.y,
       r: 10
     }
     
     //Draw the actual circles around the arrow. 
-    var drawCircles = function() {
+    let drawCircles = function() {
       ctx.beginPath();
       ctx.arc(shootingCirc.x, shootingCirc.y, shootingCirc.r, 0, 2*Math.PI);
       ctx.strokeStyle = "rgba(0,0,0,0.5)";
@@ -65,8 +63,7 @@ class App extends Component {
       ctx.stroke();
       // drawAimer();
     }
-
-    drawCircles()
+    drawCircles();
 
 
   }
@@ -105,6 +102,7 @@ class App extends Component {
       <div className="App"  >
         
           <DrawbackCircle  onMouseUp={this.onMouseDown} onMouseDown={this.handleDrawback} onMouseMove={this.onMouseMove}/>
+          <DrawbackInnerCircle  onMouseUp={this.onMouseDown} onMouseDown={this.handleDrawback} onMouseMove={this.onMouseMove}/>
           <Grenade />
         
       </div>

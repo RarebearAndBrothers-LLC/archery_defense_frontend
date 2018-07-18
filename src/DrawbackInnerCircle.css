@@ -1,0 +1,10 @@
+.DrawbackInnerCircle {
+    position: absolute;
+    top: 824px;
+    left: 190px;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    border-radius: 150px;
+    opacity: .3
+}
