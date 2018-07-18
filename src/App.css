@@ -1,0 +1,13 @@
+.App {
+  position: relative;
+}
+
+body, html {
+  height: 100%;
+  background-image: url("http://3.bp.blogspot.com/_r3adJMMRsz0/TOvdM7ViFiI/AAAAAAAAAKY/aKPKjxOuAro/s1600/092.jpg");
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
