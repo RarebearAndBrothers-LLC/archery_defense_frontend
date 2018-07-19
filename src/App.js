@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import DrawbackCircle from './DrawbackCircle'
-import Grenade from './Grenade';
+// import Grenade from './Grenade';
 import DrawbackInnerCircle from './DrawbackInnerCircle';
 
 
@@ -10,6 +10,8 @@ class App extends Component {
     super();
 
     this.state = {
+      mousePos: {x: "" , y: ""},
+      aimCords: {x: "", y: ""},
       mouseUp: false,
       mouseDown: false,
       grenadeDrawn: false, 
@@ -53,10 +55,16 @@ class App extends Component {
   onMouseMove = (event) => {
     // Knows where mouse is on outer circle, this will be used
     // to render the movement of the arrow eventually. 
-    // console.log(event.screenX, event.screenY)
+    this.setState({ mousePos: {...this.state.mousePos, x: event.screenX, y: event.screenY }})
+
+    let dist = Math.min(this.distBetween(this.state.x1, this.state.y1, this.state.mousePos.x, this.state.mousePos.y,), 60)
+    
+    let angle = Math.PI/2 - this.angleBetween(this.state.mousePos.x, this.state.mousePos.y, this.state.x1, this.state.y1)
+    
   }
 
   onMouseDown = (event) => {
+    event.preventDefault()
     this.setState({
       mouseDown: true,
       mouseUp: false,
@@ -82,13 +90,10 @@ class App extends Component {
 
   distBetween = (x1, y1, x2, y2) => {
     //~Distance from center of circle to mouse position on canvas. 
-    //~p1 is center of circle, p2 is mouse positon within the circle.
     return Math.sqrt( Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2) );
   }
 
   angleBetween = (x1, y1, x2, y2) => {
-    //~p1 is position of mouse anywhere on canvas
-    //~p2 is center of shooting circle 
     //~return value is in radians: -pi -> pi
     return Math.atan2(y2-y1, x2-x1);
   }
@@ -96,17 +101,23 @@ class App extends Component {
   
 
   handleDrawback = () => {
-    if(this.state.mouseDown && this.state.grenadeDrawn){
+    if(this.state.mouseDown){
       console.log("arrow is ready to fire")
       console.log("x1", this.state.x1)
       console.log("y1", this.state.y1)
+
+
     } else if (this.state.mouseUp && this.state.grenadeFired) {
       console.log("arrow is fired")
       console.log("x2", this.state.x2)
       console.log("y2", this.state.y2)
 
-      let dist = this.distBetween(this.state.x1, this.state.y1, this.state.x2, this.state.y2)
-      console.log("distance", dist)
+      
+      
+
+      // this.setState({aimCords: {...this.state.aimCords, x: this.state.x1 + dist*Math.sin(angle), y:this.state.y1 + dist*Math.cos(angle)}},()=>console.log(this.state.aimCords) )
+      
+     
     }
   }
 
