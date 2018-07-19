@@ -7,7 +7,7 @@ class Grenade extends React.Component {
        
         return (
             <div> 
-                <img className="Grenade" src={"https://www.halopedia.org/images/thumb/1/12/H5G-Sticky.png/160px-H5G-Sticky.png"}/> 
+                <img className="Grenade" src={"https://www.halopedia.org/images/thumb/1/12/H5G-Sticky.png/160px-H5G-Sticky.png"} alt={"grenade"}/> 
             </div>
         )   
     }

@@ -6,7 +6,7 @@ class DrawbackInnerCircle extends React.Component {
     render(){
        
         return (
-            <div className="DrawbackInnerCircle"  onMouseUp={this.props.onMouseUp} onMouseDown={this.props.onMouseDown} onMouseMove={this.props.onMouseMove}> 
+            <div className="DrawbackInnerCircle"   onMouseDown={this.props.onMouseDown} onMouseMove={this.props.onMouseMove}> 
                
             </div>
         )   

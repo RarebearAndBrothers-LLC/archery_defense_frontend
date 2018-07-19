@@ -10,8 +10,15 @@ class App extends Component {
     super();
 
     this.state = {
+      mouseUp: false,
+      mouseDown: false,
       grenadeDrawn: false, 
       grenadeFired: false,
+      x1: "",
+      y1: "",
+      x2: "",
+      y2: "",
+
     }
   }
 
@@ -21,7 +28,7 @@ class App extends Component {
     //~ returns a drawing context on the canvas, or null if the context identifier is not supported
     //~ "2d" refers to the contextType 
     var ctx = canvas.getContext("2d");
-    canvas.width=window.innerWidth;
+    canvas.width=window.innerWidth ;
     canvas.height=window.innerHeight;
     document.body.appendChild(canvas);
     let cWidth=canvas.width;
@@ -40,32 +47,6 @@ class App extends Component {
     ctx.fillStyle="rgba(0,200,100,0.6)";
     ctx.fillRect(0,ground,cWidth,cHeight);
 
-    let shootingCirc = {
-      x: 200,
-      y: groundPoint-100,
-      r: 75
-    }
-    
-    let drawBackCirc = {
-      x: shootingCirc.x,
-      y: shootingCirc.y,
-      r: 10
-    }
-    
-    //Draw the actual circles around the arrow. 
-    let drawCircles = function() {
-      ctx.beginPath();
-      ctx.arc(shootingCirc.x, shootingCirc.y, shootingCirc.r, 0, 2*Math.PI);
-      ctx.strokeStyle = "rgba(0,0,0,0.5)";
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(drawBackCirc.x, drawBackCirc.y, drawBackCirc.r, 0, 2*Math.PI);
-      ctx.stroke();
-      // drawAimer();
-    }
-    drawCircles();
-
-
   }
 
 
@@ -75,35 +56,66 @@ class App extends Component {
     // console.log(event.screenX, event.screenY)
   }
 
-  // onMouseUp = (event) => {
-  //   console.log(event.screenX, event.screenY)
-  // }
+  onMouseDown = (event) => {
+    this.setState({
+      mouseDown: true,
+      mouseUp: false,
+      grenadeDrawn: true,
+      x1: event.screenX,
+      y1: event.screenY,
+    }, () => this.handleDrawback())
 
-  handleDrawback = (event) => {
-    console.log("MouseDown", event.screenX, event.screenY)
-    let x = event.screenX 
-    let y = event.screenY
+    
+  }
 
-    if(x >= -30 && x <= 0 && y >= -215 && y <= -185) {
-      //first click is within inner draw circle 
-      //User has now bgeun to draw arrow
-      
-      this.setState({grenadeDrawn: true}, ()=> console.log(this.state))
-    } else if ( (x <= -30 || x >= 0) && (y <= -215 || y >= -185) && this.state.grenadeDrawn === true) {
-      this.setState({grenadeFired: true, grenadeDrawn: false }, ()=> console.log("fired", this.state))
-    } else {
-      console.log("missed something")
+  onMouseUp = (event) => {
+    this.setState({
+      mouseDown: false, 
+      mouseUp: true, 
+      grenadeDrawn: false, 
+      grenadeFired: true, 
+      x2: event.screenX,
+      y2: event.screenY,
+     
+    }, () => this.handleDrawback())
+  }
+
+  distBetween = (x1, y1, x2, y2) => {
+    //~Distance from center of circle to mouse position on canvas. 
+    //~p1 is center of circle, p2 is mouse positon within the circle.
+    return Math.sqrt( Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2) );
+  }
+
+  angleBetween = (x1, y1, x2, y2) => {
+    //~p1 is position of mouse anywhere on canvas
+    //~p2 is center of shooting circle 
+    //~return value is in radians: -pi -> pi
+    return Math.atan2(y2-y1, x2-x1);
+  }
+
+  
+
+  handleDrawback = () => {
+    if(this.state.mouseDown && this.state.grenadeDrawn){
+      console.log("arrow is ready to fire")
+      console.log("x1", this.state.x1)
+      console.log("y1", this.state.y1)
+    } else if (this.state.mouseUp && this.state.grenadeFired) {
+      console.log("arrow is fired")
+      console.log("x2", this.state.x2)
+      console.log("y2", this.state.y2)
+
+      let dist = this.distBetween(this.state.x1, this.state.y1, this.state.x2, this.state.y2)
+      console.log("distance", dist)
     }
-    console.log("done drawing")
   }
 
   render() {
     return (
-      <div className="App"  >
+      <div className="App"  onMouseUp={this.onMouseUp}>
         
-          <DrawbackCircle  onMouseUp={this.onMouseDown} onMouseDown={this.handleDrawback} onMouseMove={this.onMouseMove}/>
-          <DrawbackInnerCircle  onMouseUp={this.onMouseDown} onMouseDown={this.handleDrawback} onMouseMove={this.onMouseMove}/>
-          <Grenade />
+          <DrawbackCircle   onMouseMove={this.onMouseMove}/>
+          <DrawbackInnerCircle   onMouseDown={this.onMouseDown} onMouseMove={this.onMouseMove}/>
         
       </div>
 
